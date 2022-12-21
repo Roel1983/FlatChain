@@ -16,7 +16,7 @@ module LinkA(config = LinkConfig()) {
     link_bottom_height     = ConfigGet(config, "bottom_height");
     
     link_inner_angle       = ConfigGet(config, "inner_angle");
-    link_width_1           = ConfigGet(config, "width_1");
+    link_width_1           = ConfigGet(config, "top_outer_side");
     link_joint_path_radius = ConfigGet(config, "joint_path_radius");
     link_joint_size        = ConfigGet(config, "joint_size");
         
@@ -50,7 +50,7 @@ module LinkA(config = LinkConfig()) {
                             }
                         }
                     }
-                    a = link_joint_size / 2 + link_thickness;
+                    a = link_joint_size / 2 + link_thickness + link_tolerance_xy;
                     polygon([
                         [-link_size / 2, 0],
                         [-link_size / 2 + a, a],

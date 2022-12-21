@@ -18,10 +18,10 @@ function LinkConfig(
     // Height of the top part of the link
     top_height         = layer(7),
     // Height of the bottom part of the link
-    bottom_height      = layer(7),
+    bottom_height      = layer(6),
     tolerance_z        = layer(1),
     // Tolerance of compensate hanging bridges
-    bridge_tolerance_z = layer(1)
+    bridge_tolerance_z = layer(3)
 ) = Config(undef,
     "LinkConfig",
     let(
@@ -47,10 +47,20 @@ function LinkConfig(
             ) / joint_path_radius
         ), grip_angle = (
             inner_angle + angle
-        ), width_1 = (
+        ), center_radius = (
+            (size / 2) / tan(angle / 2)
+        ), joint_radius = (
+            sqrt(pow(center_radius, 2) + pow(size/2, 2))
+        ), top_outer_side = (
             0.5 * joint_size
             + 2 * tolerance_xy
             + 1 * thickness
+        ), top_inner_side = (
+            joint_size / 2
+        ), bottom_outer_side = (
+            top_outer_side + thickness
+        ), bottom_inner_side = (
+            top_outer_side - tolerance_xy
         )
     )
     assert(
@@ -74,6 +84,11 @@ function LinkConfig(
         ["joint_path_radius",  joint_path_radius],
         ["joint_path_width",   joint_path_width],
         ["inner_angle",        inner_angle],
-        ["width_1",            width_1]
+        ["center_radius",      center_radius],
+        ["joint_radius",       joint_radius],
+        ["top_outer_side",     top_outer_side],
+        ["top_inner_side",     top_inner_side],
+        ["bottom_outer_side",  bottom_outer_side],
+        ["bottom_inner_side",  bottom_inner_side],
     ]
 );

@@ -21,10 +21,9 @@ module LinkB(config = LinkConfig()) {
     link_joint_path_radius  = ConfigGet(config, "joint_path_radius");
     link_joint_path_width   = ConfigGet(config, "joint_path_width");
     link_inner_angle        = ConfigGet(config, "inner_angle");
-    link_width_1            = ConfigGet(config, "width_1");
-    link_width_2 = (
-        link_joint_size / 2 + link_tolerance_xy
-    );
+    link_width_1            = ConfigGet(config, "top_outer_side");
+    link_width_2            = ConfigGet(config, "top_inner_side");
+    
     link_center_width = (
         link_tooth_size +
         2 * link_joint_path_width -
@@ -38,8 +37,8 @@ module LinkB(config = LinkConfig()) {
     r1 = 1.5 * link_thickness + link_tolerance_xy;
     // Top
     
-    translate([0,0, -link_bottom_height]) {
-        linear_extrude(link_bottom_height) {
+    translate([0,0, -link_top_height]) {
+        linear_extrude(link_top_height) {
             difference() {
                 union() {
                     translate([0, link_width_2/2]) {
