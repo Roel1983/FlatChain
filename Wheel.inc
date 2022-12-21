@@ -6,7 +6,7 @@ use <Wheel.scad>
 function WheelConfig(
     link_config = LinkConfig(),
     axcel       = 3.0,
-    hub_height  = 8.0
+    hub_height  = 4.0
 ) = Config(undef,
     "WheelConfig",
     [

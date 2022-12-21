@@ -1,5 +1,6 @@
 include <../Utils/Units.inc>
-include <Links.inc>
+include <LinkA.inc>
+include <LinkB.inc>
 include <Wheel.inc>
 
 %mirror([0,0,1]) linear_extrude(3) square([44, 46], true);

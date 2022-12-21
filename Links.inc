@@ -1,27 +1,27 @@
 UNITS_NOZZLE = mm(0.4);
-UNITS_LAYER  = mm(0.15);
+UNITS_LAYER  = mm(0.1);
 include <../Utils/Units.inc>
 include <../Utils/Config.inc>
 
 function LinkConfig(
     // Size of the link from pivot to pivot
-    size               = mm(7),
+    size               = mm(8),
     // Thickness of the sliding wall
     thickness          = nozzle(3),
     // Thickness of the tooth drving this link
     tooth_size         = nozzle(3),
     // Tolerance in the X-Y-plane direction for the moving parts
-    tolerance_xy       = mm(0.05),
-    360_pair_count     = 5,
+    tolerance_xy       = mm(0.03),
+    360_pair_count     = 4,
     // Total height of the link (exclusive tolerance)
-    height             = layer(19),
+    height             = layer(28),
     // Height of the top part of the link
-    top_height         = layer(4),
+    top_height         = layer(7),
     // Height of the bottom part of the link
-    bottom_height      = layer(4),
+    bottom_height      = layer(7),
     tolerance_z        = layer(1),
     // Tolerance of compensate hanging bridges
-    bridge_tolerance_z = layer(2)
+    bridge_tolerance_z = layer(1)
 ) = Config(undef,
     "LinkConfig",
     let(
