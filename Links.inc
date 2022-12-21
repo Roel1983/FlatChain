@@ -1,0 +1,79 @@
+UNITS_NOZZLE = mm(0.4);
+UNITS_LAYER  = mm(0.15);
+include <../Utils/Units.inc>
+include <../Utils/Config.inc>
+
+function LinkConfig(
+    // Size of the link from pivot to pivot
+    size               = mm(7),
+    // Thickness of the sliding wall
+    thickness          = nozzle(3),
+    // Thickness of the tooth drving this link
+    tooth_size         = nozzle(3),
+    // Tolerance in the X-Y-plane direction for the moving parts
+    tolerance_xy       = mm(0.05),
+    360_pair_count     = 5,
+    // Total height of the link (exclusive tolerance)
+    height             = layer(19),
+    // Height of the top part of the link
+    top_height         = layer(4),
+    // Height of the bottom part of the link
+    bottom_height      = layer(4),
+    tolerance_z        = layer(1),
+    // Tolerance of compensate hanging bridges
+    bridge_tolerance_z = layer(2)
+) = Config(undef,
+    "LinkConfig",
+    let(
+        angle      = (
+            180 / 360_pair_count
+        ), joint_size = (
+            size
+            - tooth_size
+            - 2 * thickness
+            - 4 * tolerance_xy
+        ), joint_path_radius = (
+            0.5 * joint_size
+            + tolerance_xy
+            + 0.5 * thickness
+        ), joint_path_width = (
+            thickness 
+            + 2 * tolerance_xy
+        ), inner_angle = asin(
+            (
+                joint_size / 2
+                - thickness * 1.5
+                - tolerance_xy
+            ) / joint_path_radius
+        ), grip_angle = (
+            inner_angle + angle
+        ), width_1 = (
+            0.5 * joint_size
+            + 2 * tolerance_xy
+            + 1 * thickness
+        )
+    )
+    assert(
+        grip_angle >= 15,
+        str("Grip angle too low: ", grip_angle, " < ", 90)
+    )
+    [
+        ["size",               size],
+        ["thickness",          thickness],
+        ["tooth_size",         tooth_size],
+        ["tolerance_xy",       tolerance_xy],
+        ["360_pair_count",     360_pair_count],
+        ["height",             height],
+        ["top_height",         top_height],
+        ["bottom_height",      bottom_height],
+        ["tolerance_z",        tolerance_z],
+        ["bridge_tolerance_z", bridge_tolerance_z],
+        /* Derived */
+        ["angle",              angle],
+        ["joint_size",         joint_size],
+        ["joint_path_radius",  joint_path_radius],
+        ["joint_path_width",   joint_path_width],
+        ["inner_angle",        inner_angle],
+        ["width_1",            width_1]
+    ]
+);
