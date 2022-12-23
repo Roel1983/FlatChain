@@ -62,7 +62,6 @@ module LinkA(config = LinkConfig()) {
                                     b = link_center_radius + link_joint_path_radius;
                                     c = atan(a / b);
                                     
-                                    echo(c);
                                     rotate(180 + c) {
                                         square(link_bottom_outer_edge_radius);
                                     }

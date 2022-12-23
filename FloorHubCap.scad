@@ -1,4 +1,3 @@
-
 include <../Utils/LinearExtrude.inc>
 include <../Utils/TransformIf.inc>
 include <Floor.inc>
@@ -6,7 +5,9 @@ use <FloorHubBottom.scad>
 
 $fn = 64;
 
-floor_config = FloorConfig();
+link_config     = LinkConfig();
+groove_config   = GrooveConfig(link_config = link_config);
+floor_config    = FloorConfig(groove_config = groove_config);
 
 FloorHubCap(floor_config, printable = true);
 
