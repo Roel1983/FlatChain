@@ -11,7 +11,8 @@ function GrooveConfig(
     tolerance_xy_straight_top    = mm(.20),
     tolerance_xy_straight_bottom = mm(.30),
     tolerance_z                  = mm(.35),
-    wheel_clearance_xy           = mm(.2)
+    wheel_clearance_xy           = mm(.2),
+    wheel_axcel_clearance_xy     = mm(.1),
 ) = Config(undef,
     "GrooveConfig",
     let(
@@ -32,6 +33,7 @@ function GrooveConfig(
         ["tolerance_xy_straight_bottom", tolerance_xy_straight_bottom],
         ["tolerance_z",                  tolerance_z],
         ["wheel_clearance_xy",           wheel_clearance_xy],
+        ["wheel_axcel_clearance_xy",     wheel_axcel_clearance_xy],
         /* Derived */
         ["overhang_thickness",           overhang_thickness],
         ["seam_position",                seam_position],

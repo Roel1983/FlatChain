@@ -53,7 +53,7 @@ module FloorHubBottom(config = FloorConfig()) {
                     circle(d=mm(3.1));
                 }
             }
-            BottomHex();
+            BottomHex(config);
         }
         LinearExtrude(z_to = -floor_thickness - BIAS, z_from = -floor_thickness + layer(1.5)) {
             translate([floor_width/4,0])rotate(-90) CommitText();
@@ -82,50 +82,55 @@ module FloorHubBottom(config = FloorConfig()) {
                 }
             }
         }
-        BottomSlots(offset_xy=slot_clearance, offset_z=layer(1));
+        BottomSlots(config, offset_xy=slot_clearance, offset_z=layer(1));
     }
+}
 
-    module BottomHex(offset_xy = 0, offset_z = 0) {
-        translate([floor_hub_hexnut_pos,0]) {
-            LinearExtrude(z_from=-floor_thickness, z_to=0 + offset_z) {
-                Hex(floor_hub_hexnut_size[X] + 2 * floor_hub_hexnut_wall + offset_xy);
-            }
+module BottomHex(config, offset_xy = 0, offset_z = 0) {
+    floor_hub_hexnut_pos  = ConfigGet(config, "hub_hexnut_pos");
+    floor_thickness       = ConfigGet(config, "thickness");
+    floor_hub_hexnut_wall = ConfigGet(config, "hub_hexnut_wall");
+    floor_hub_hexnut_size = ConfigGet(config, "hub_hexnut_size");
+    
+    translate([floor_hub_hexnut_pos,0]) {
+        LinearExtrude(z_from=-floor_thickness, z_to=0 + offset_z) {
+            Hex(floor_hub_hexnut_size[X] + 2 * floor_hub_hexnut_wall + offset_xy);
         }
     }
+}
 
-    module BottomTopInnerHubSlots(offset_xy = 0, offset_z = 0) {
-        z_from = -mm(2.7) - offset_z;
-        width  = nozzle(2) + offset_xy;
-        translate([24,0]) {
-            LinearExtrude(z_from= z_from, z_to=-1.5) square([8.1, width], true);
-        }   
-    }
+module BottomTopInnerHubSlots(config, offset_xy = 0, offset_z = 0) {
+    z_from = -mm(2.7) - offset_z;
+    width  = nozzle(2) + offset_xy;
+    translate([24,0]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([8.1, width], true);
+    }   
+}
 
-    module BottomTopOuterSlots(offset_xy = 0, offset_z = 0) {
-        z_from = -mm(2.7) - offset_z;
-        width  = nozzle(2) + offset_xy;
-        translate([-18,0]) {
-            LinearExtrude(z_from= z_from, z_to=-1.5) square([width, 18.1], true);
-        }
-        translate([15,18]) {
-            LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
-        }
-        translate([15,-18]) {
-            LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
-        }
+module BottomTopOuterSlots(config, offset_xy = 0, offset_z = 0) {
+    z_from = -mm(2.7) - offset_z;
+    width  = nozzle(2) + offset_xy;
+    translate([-18,0]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([width, 18.1], true);
     }
+    translate([15,18]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
+    }
+    translate([15,-18]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
+    }
+}
 
-    module BottomTopInnerStraight(offset_xy = 0, offset_z = 0) {
-        z_from = -mm(2.7) - offset_z;
-        width  = nozzle(2) + offset_xy;
-        translate([34.5,0]) {
-            LinearExtrude(z_from= z_from, z_to=-1.5) square([6.1, width], true);
-        }
+module BottomTopInnerStraight(config, offset_xy = 0, offset_z = 0) {
+    z_from = -mm(2.7) - offset_z;
+    width  = nozzle(2) + offset_xy;
+    translate([34.5,0]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([6.1, width], true);
     }
+}
 
-    module BottomSlots(offset_xy = 0, offset_z = 0) {
-        BottomTopInnerHubSlots(offset_xy, offset_z);
-        BottomTopOuterSlots(offset_xy, offset_z);
-        BottomTopInnerStraight(offset_xy, offset_z);
-    }
+module BottomSlots(config, offset_xy = 0, offset_z = 0) {
+    BottomTopInnerHubSlots(config, offset_xy, offset_z);
+    BottomTopOuterSlots(config, offset_xy, offset_z);
+    BottomTopInnerStraight(config, offset_xy, offset_z);
 }
