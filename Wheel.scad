@@ -24,9 +24,10 @@ module Wheel(config = WheelConfig()) {
     link_bridge_tolerance_z = ConfigGet(link_config, "bridge_tolerance_z");
     link_angle              = ConfigGet(link_config, "angle");
     link_joint_size         = ConfigGet(link_config, "joint_size");
+    link_hub_diameter       = ConfigGet(config, "hub_diameter");
     
     link_center_radius = (link_size / 2) / tan(link_angle / 2);
-    link_hub_diameter = link_axcel+2*link_thickness;
+    
     
     difference() {
         union() {

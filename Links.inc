@@ -61,6 +61,11 @@ function LinkConfig(
             top_outer_side + thickness
         ), bottom_inner_side = (
             top_outer_side - tolerance_xy
+        ), bottom_outer_edge_radius = (
+            norm([
+                size / 2 + sin(inner_angle) * joint_path_radius,
+                center_radius + cos(inner_angle) * joint_path_radius
+            ]) + 1.5 * thickness + tolerance_xy
         )
     )
     assert(
@@ -90,5 +95,6 @@ function LinkConfig(
         ["top_inner_side",     top_inner_side],
         ["bottom_outer_side",  bottom_outer_side],
         ["bottom_inner_side",  bottom_inner_side],
+        ["bottom_outer_edge_radius", bottom_outer_edge_radius]
     ]
 );

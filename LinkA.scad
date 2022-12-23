@@ -19,6 +19,8 @@ module LinkA(config = LinkConfig()) {
     link_width_1           = ConfigGet(config, "top_outer_side");
     link_joint_path_radius = ConfigGet(config, "joint_path_radius");
     link_joint_size        = ConfigGet(config, "joint_size");
+    link_center_radius     = ConfigGet(config, "center_radius");
+    link_bottom_outer_edge_radius = ConfigGet(config, "bottom_outer_edge_radius");
         
     translate([0,0,-link_top_height]) linear_extrude(link_top_height) {
         hull() {
@@ -45,6 +47,29 @@ module LinkA(config = LinkConfig()) {
                                 rotate(link_inner_angle) {
                                     translate([0, -link_joint_path_radius]) {
                                         circle(r=aa);
+                                    }
+                                }
+                            }
+                            translate([0, link_center_radius]) {
+                                intersection() {
+                                    circle(r=link_bottom_outer_edge_radius);
+                                    a = (
+                                        0.5 * (link_size + link_joint_size) -
+                                        1.0 * link_tolerance_xy -
+                                        1.5 * link_thickness
+                                    );
+                                    b = link_center_radius + link_joint_path_radius;
+                                    c = atan(a / b);
+                                    
+                                    echo(c);
+                                    rotate(180 + c) {
+                                        square(link_bottom_outer_edge_radius);
+                                    }
+                                    rotate(-90 -c) {
+                                        square(link_bottom_outer_edge_radius);
+                                    }
+                                    translate([0, -b - a]) {
+                                        square(2*a + link_joint_size, center = true);
                                     }
                                 }
                             }
