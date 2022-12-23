@@ -1,5 +1,6 @@
 include <../Utils/LinearExtrude.inc>
 include <../Utils/TransformIf.inc>
+include <../Utils/Git.inc>
 include <Floor.inc>
 use <FloorHubBottom.scad>
 
@@ -30,12 +31,12 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     bearing_size = mm([6.0, 2.0]);
     wheel_hub_diameter   = bearing_size[X] - nozzle(1);
     
-    extra  = mm(.5);
-    height = mm(2.);
+    extra  = mm(1.0);
+    height = mm(3.5);
     
     BIAS = 0.1;
     
-    mirror_if(printable, VEC_Z) {
+    mirror_if(printable && !$preview, VEC_Z) {
         difference() {
             union() {
                 LinearExtrude(z_from= -groove_seam_position, z_to = 0) {
@@ -53,6 +54,11 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                     }
                 }
                 BottomTopInnerHubSlots(config);
+                translate([23,0, height]) {
+                    LinearExtrude(z_from = -BIAS, z_to=layer(1.5)) {
+                        rotate(90) mirror(VEC_X) CommitText(len = 4);
+                    }
+                }
             }
             BottomHex(config, offset_xy = slot_clearance, offset_z = layer(0));
             LinearExtrude(z_from= height - bearing_size[Y], z_to = height + BIAS) {
