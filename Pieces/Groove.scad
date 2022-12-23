@@ -1,6 +1,7 @@
 include <../../Utils/Constants.inc>
 include <../../Utils/Debug.inc>
 include <../../Utils/Points.inc>
+include <../../Utils/Bezier.inc>
 include <Groove.inc>
 
 $fn=46;
@@ -8,7 +9,7 @@ $fn=46;
 groove_config   = GrooveConfig();
 link_config     = ConfigGet(groove_config, "link_config");
 
-points = points_groove_top(extra = 10);
+points = points_groove_top_outer(extra = 20);
 DebugPoints(points);
 polygon(points);
 
@@ -17,6 +18,81 @@ function points_groove_top_outer(
     extra
 ) = (
     let(
+        link_center_radius           = (
+            ConfigGet(link_config,   "center_radius")
+        ), link_top_outer_side = (
+            ConfigGet(link_config,   "top_outer_side")
+        ), link_size = (
+            ConfigGet(link_config,   "size")
+        ), link_joint_size = (
+            ConfigGet(link_config,   "joint_size")
+        ), link_joint_radius = (
+            ConfigGet(link_config,   "joint_radius")
+        ), groove_tolerance_xy_hub_top   = (
+            ConfigGet(groove_config, "tolerance_xy_hub_top")
+        ), groove_tolerance_xy_straight_top   = (
+            ConfigGet(groove_config, "tolerance_xy_straight_top")
+        ), radius = (norm([
+                link_center_radius + link_top_outer_side,
+                (link_size + link_joint_size) / 2
+            ]) 
+        ), bezier_length = (
+            radius
+        ), inner_size = (
+            link_joint_radius + link_top_outer_side + groove_tolerance_xy_straight_top / 2
+        ), points_groove_circle = (
+            points_trim(
+                first = 1,
+                last  = 1,
+                
+                points_of_circle(
+                    r = radius + groove_tolerance_xy_hub_top / 2,
+                    a1 = 90,
+                    a2 = 270
+                )
+            ) 
+        ), bezier_points = (
+            bezier_points(
+                p0 = [
+                    bezier_length,
+                    inner_size
+                ],
+                p1 = [
+                    bezier_length * 2/3,
+                    inner_size
+                ],
+                p2 = [
+                    bezier_length * 1/3,
+                    radius
+                ],
+                p3 = [
+                    0,
+                    radius
+                ]
+            )
+        ), point_straight = (
+            assert(extra > bezier_length)
+            [
+                [
+                    extra,
+                    inner_size
+                ]
+            ]
+        ),
+        points_not_circle = concat(
+            point_straight,
+            bezier_points
+        )
+    )
+    concat(
+        points_not_circle,
+        points_groove_circle,
+        points_reverse(points_mirror(VEC_Y,
+            points_not_circle
+        ))
+    )
+    
+    /*let(
         groove_tolerance_xy_straight_top = (
             ConfigGet(groove_config, "tolerance_xy_straight_top")
         ), groove_tolerance_xy_hub_top   = (
@@ -46,7 +122,7 @@ function points_groove_top_outer(
             + groove_tolerance_xy_hub_top / 2
         ),
         extra                  = extra
-    )
+    )*/
 );
 
 function points_groove_top_inner(
