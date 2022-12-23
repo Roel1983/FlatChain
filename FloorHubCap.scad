@@ -55,10 +55,10 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                     }
                 }
                 BottomTopInnerHubSlots(config);
-                translate([23,0, height]) {
-                    LinearExtrude(z_from = -BIAS, z_to=layer(1.5)) {
-                        rotate(90) CommitText(len = 4);
-                    }
+            }
+            translate([23,0, height]) {
+                LinearExtrude(z_from = -layer(1.5), z_to=BIAS) {
+                    rotate(90) CommitText(len = 4);
                 }
             }
             BottomHex(config, offset_xy = slot_clearance, offset_z = layer(0));
