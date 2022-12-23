@@ -44,6 +44,8 @@ groove_tolerance_xy_straight_bottom = mm(.5);
 groove_tolerance_z                  = mm(.3);
 groove_wheel_clearance_xy           = mm(.2);
 groove_wheel_axcel_clearance_xy     = mm(.1);
+slot_clearance                      = mm(0.0);
+
 
 groove_hub_top_outer_radius = norm([
     center_radius + top_outer_side,
@@ -79,7 +81,8 @@ groove_straight_bottom_inner = (
 
 Bottom();
 TopInnerHub();
-!TopOuter();
+TopOuter();
+
 module TopOuter() {
     render() union() {
         difference() {
@@ -92,15 +95,7 @@ module TopOuter() {
                 polygon(points_bottom_outer(35));
             }
         }
-        translate([-18,0]) {
-            LinearExtrude(z_from= -2.7, z_to=-1.5) square([.8, 18.0], true);
-        }
-        translate([15,18]) {
-            LinearExtrude(z_from= -2.7, z_to=-1.5) square([30., .8], true);
-        }
-        translate([15,-18]) {
-            LinearExtrude(z_from= -2.7, z_to=-1.5) square([30., .8], true);
-        }
+        BottomTopOuterSlots();
     }
 }
 
@@ -112,22 +107,20 @@ module TopInnerHub() {
                 polygon(points_bottom_inner(17.5));
             }
             hull() {
-                LinearExtrude(z_from= -link_top_height + groove_tolerance_z, z_to = 0) {
+                extra = .5;
+                LinearExtrude(z_from= -link_top_height + groove_tolerance_z, z_to = extra) {
                     polygon(points_top_inner(17.5));
                 }
-                translate([0,0,3]) {
-                    LinearExtrude(z_from= -link_top_height + groove_tolerance_z, z_to = 0) {
-                        offset(-3)polygon(points_top_inner(17.5 - 3/2));
+                b = 2.5;
+                translate([0,0,b]) {
+                    LinearExtrude(z_from= -link_top_height + groove_tolerance_z, z_to = extra) {
+                        offset(-b)polygon(points_top_inner(17.5 - 3/2));
                     }
                 }
             }
-            translate([24,0]) {
-                LinearExtrude(z_from= -2.7, z_to=-1.5) square([8.0, .8], true);
-            }
+            BottomTopInnerHubSlots();
         }
-        translate([15,0]) {
-            LinearExtrude(z_from= -3, z_to=0.3) Hex(mm(5.6) + nozzle(4));
-        }
+        BottomHex(offset_xy = slot_clearance, offset_z = layer(0));
         LinearExtrude(z_from= 1, z_to = 3 + BIAS) {
             circle(d=6);
         }
@@ -145,13 +138,54 @@ module TopInnerHub() {
         }
     }
 }
+
+module BottomTopInnerHubSlots(offset_xy = 0, offset_z = 0) {
+    z_from = -mm(2.7) - offset_z;
+    width  = nozzle(2) + offset_xy;
+    translate([24,0]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([8.1, width], true);
+    }   
+}
+
+module BottomTopOuterSlots(offset_xy = 0, offset_z = 0) {
+    z_from = -mm(2.7) - offset_z;
+    width  = nozzle(2) + offset_xy;
+    translate([-18,0]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([width, 18.1], true);
+    }
+    translate([15,18]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
+    }
+    translate([15,-18]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
+    }
+}
+
+module BottomTopInnerStraight(offset_xy = 0, offset_z = 0) {
+    z_from = -mm(2.7) - offset_z;
+    width  = nozzle(2) + offset_xy;
+    translate([34.5,0]) {
+        LinearExtrude(z_from= z_from, z_to=-1.5) square([6.1, width], true);
+    }
+}
+
+module BottomSlots(offset_xy = 0, offset_z = 0) {
+    BottomTopInnerHubSlots(offset_xy, offset_z);
+    BottomTopOuterSlots(offset_xy, offset_z);
+    BottomTopInnerStraight(offset_xy, offset_z);
+}
+module BottomHex(offset_xy = 0, offset_z = 0) {
+    translate([15,0]) {
+        LinearExtrude(z_from= -3, z_to=0 + offset_z) {
+            Hex(mm(5.5) + nozzle(4) + offset_xy);
+        }
+    }
+}
 module Bottom() {
     difference() {
         union() {
             Box(x_from=-20, x_to=40, y_from = -20, y_to=20, z_from=-3.8, z_to = -2);
-            translate([15,0]) {
-                LinearExtrude(z_from= -3, z_to=0) Hex(mm(5.5) + nozzle(4));
-            }
+            BottomHex(offset_xy = 0, offset_z = 0);
         }
         LinearExtrude(z_from= -link_height, z_to = 0) {
             
@@ -166,21 +200,7 @@ module Bottom() {
                 LinearExtrude(z_from= -4, z_to=-3.8 + 2.5 + .8) circle(d=mm(3.1));
             }
         }
-        translate([-18,0]) {
-            LinearExtrude(z_from= -3, z_to=-1.5) square([.9, 18.1], true);
-        }
-        translate([24,0]) {
-            LinearExtrude(z_from= -3, z_to=-1.5) square([8.1, .9], true);
-        }
-        translate([34.5,0]) {
-            LinearExtrude(z_from= -3, z_to=-1.5) square([6.1, .9], true);
-        }
-        translate([15,18]) {
-            LinearExtrude(z_from= -3, z_to=-1.5) square([30.1, .9], true);
-        }
-        translate([15,-18]) {
-            LinearExtrude(z_from= -3, z_to=-1.5) square([30.1, .9], true);
-        }
+        BottomSlots(offset_xy=slot_clearance, offset_z=layer(1));
     }
 }
 
@@ -269,7 +289,7 @@ function groove_points(
     }
 }
 
-Wheel(wheel_config);
+color("blue") Wheel(wheel_config);
 for (i = [0 : 4]) {
     rotate(-i * angle) translate([0, -center_radius]) {
         if(i % 2 == 0) {

@@ -50,6 +50,7 @@ module LinkA(config = LinkConfig()) {
                                     }
                                 }
                             }
+                            /* round edge */
                             translate([0, link_center_radius]) {
                                 intersection() {
                                     circle(r=link_bottom_outer_edge_radius);

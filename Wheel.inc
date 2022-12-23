@@ -13,17 +13,13 @@ function WheelConfig(
         link_center_radius = ConfigGet(link_config, "center_radius"),
         link_tooth_size    = ConfigGet(link_config, "tooth_size"),
         link_thickness     = ConfigGet(link_config, "thickness"),
-        hub_diameter       = axcel + 2 * link_thickness,
-        radius = (
-            link_center_radius + link_tooth_size / 2
-        )
+        hub_diameter       = axcel + 2 * link_thickness
     )
     [
         ["link_config", link_config],
         ["axcel",       axcel],
         ["hub_height",  hub_height],
         /* Derived */
-        ["hub_diameter", hub_diameter],
-        ["radius",       radius]
+        ["hub_diameter", hub_diameter]
     ]
 );
