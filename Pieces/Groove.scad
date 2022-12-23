@@ -36,14 +36,14 @@ function points_groove_top_outer(
     points_groove(
         link_config            = link_config,
         normal_offset_straight = (
-            link_top_outer_side
+            link_top_outer_side + groove_tolerance_xy_straight_top / 2
         ),
         normal_offset_curve    = (
             norm([
                 link_center_radius + link_top_outer_side,
                 (link_size + link_joint_size) / 2
             ]) - link_center_radius
-            + groove_tolerance_xy_straight_top / 2
+            + groove_tolerance_xy_hub_top / 2
         ),
         extra                  = extra
     )
@@ -69,7 +69,7 @@ function points_groove_top_inner(
     points_groove(
         link_config            = link_config,
         normal_offset_straight = (
-            -link_top_inner_side
+            - link_top_inner_side
             - groove_tolerance_xy_straight_top / 2
         ),
         normal_offset_curve    = (
@@ -131,7 +131,7 @@ function points_groove_bottom_inner(
     points_groove(
         link_config            = link_config,
         normal_offset_straight = (
-            -link_bottom_inner_side
+            - link_bottom_inner_side
             - groove_tolerance_xy_straight_bottom / 2
         ),
         normal_offset_curve    = (

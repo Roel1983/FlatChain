@@ -18,6 +18,7 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
     floor_hub_length     = ConfigGet(config, "hub_length");
     floor_width          = ConfigGet(config, "width");
     floor_thickness      = ConfigGet(config, "thickness");
+    groove_config        = ConfigGet(config, "groove_config");
     link_config          = ConfigGet(groove_config, "link_config");
     groove_seam_position      = ConfigGet(groove_config, "seam_position");
     groove_overhang_thickness = ConfigGet(groove_config, "overhang_thickness");
