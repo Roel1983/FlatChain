@@ -7,10 +7,10 @@ use<Groove.scad>
 function GrooveConfig(
     link_config                  = LinkConfig(),
     tolerance_xy_hub_top         = mm(.25),
-    tolerance_xy_hub_bottom      = mm(.3),
-    tolerance_xy_straight_top    = mm(.2),
-    tolerance_xy_straight_bottom = mm(.5),
-    tolerance_z                  = mm(.3),
+    tolerance_xy_hub_bottom      = mm(.15),
+    tolerance_xy_straight_top    = mm(.20),
+    tolerance_xy_straight_bottom = mm(.30),
+    tolerance_z                  = mm(.35),
     wheel_clearance_xy           = mm(.2)
 ) = Config(undef,
     "GrooveConfig",

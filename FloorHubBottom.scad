@@ -56,7 +56,7 @@ difference() {
         }
         BottomHex();
     }
-    LinearExtrude(z_to = -floor_thickness - BIAS, z_from = -floor_thickness + layer(1)) {
+    LinearExtrude(z_to = -floor_thickness - BIAS, z_from = -floor_thickness + layer(1.5)) {
         translate([floor_width/4,0])rotate(-90) CommitText();
     }
     LinearExtrude(z_from= -groove_depth, z_to = 0) {
