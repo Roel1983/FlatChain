@@ -25,7 +25,7 @@ function points_groove_top_outer(
             ConfigGet(groove_config, "link_config")
         ), link_top_outer_side           = (
             ConfigGet(link_config,   "top_outer_side")
-        ), link_bottom_outer_edge_radius = (
+        ), link_top_outer_edge_radius = (
             ConfigGet(link_config,   "top_outer_side")
         )
     )
@@ -36,14 +36,14 @@ function points_groove_top_outer(
             + groove_tolerance_xy_straight_top / 2
         ),
         normal_offset_curve    = (
-            link_bottom_outer_edge_radius
+            link_top_outer_edge_radius
             + groove_tolerance_xy_hub_top / 2
         ),
         extra                  = extra
     )
 );
 
-function points_top_inner(
+function points_groove_top_inner(
     groove_config = GrooveConfig(),
     extra
 ) = (
@@ -56,7 +56,7 @@ function points_top_inner(
             ConfigGet(groove_config, "link_config")
         ), link_top_inner_side           = (
             ConfigGet(link_config,   "top_inner_side")
-        ), link_bottom_inner_edge_radius = (
+        ), link_top_inner_edge_radius = (
             ConfigGet(link_config,   "top_inner_side")
         )
     )
@@ -67,7 +67,7 @@ function points_top_inner(
             - groove_tolerance_xy_straight_top / 2
         ),
         normal_offset_curve    = (
-            -link_bottom_inner_edge_radius
+            -link_top_inner_edge_radius
             - groove_tolerance_xy_hub_top / 2
         ),
         extra                  = extra
@@ -105,7 +105,7 @@ function points_groove_bottom_outer(
     )
 );
 
-function points_bottom_inner(
+function points_groove_bottom_inner(
     groove_config = GrooveConfig(),
     extra
 ) = (
@@ -145,7 +145,7 @@ function points_groove_bottom(
             groove_config = groove_config,
             extra         = extra
         ),
-        points_reverse(points_bottom_inner(
+        points_reverse(points_groove_bottom_inner(
             groove_config = groove_config,
             extra         = extra
         ))

@@ -1,11 +1,38 @@
+
 include <../Utils/LinearExtrude.inc>
+include <Floor.inc>
+use <FloorHubBottom.scad>
 
-include <Groove.inc>
+floor_config = FloorConfig();
 
-FloorHubCap();
+FloorHubCap(floor_config);
+%FloorHubBottom(floor_config);
 
+module FloorHubCap(config = FloorConfig()) {
+    groove_config        = ConfigGet(config, "groove_config");
+    overhang_thickness   = ConfigGet(groove_config, "overhang_thickness");
+    
+    hull() {
+        extra = mm(.5);
+        height = mm(2.5);
+        LinearExtrude(z_from= -overhang_thickness, z_to = extra) {
+            GrooveTopInner();
+        }
+        LinearExtrude(z_from=0, z_to = height) {
+            offset(-height + extra)GrooveTopInner();
+        }
+    }
+    
+    module GrooveTopInner() {
+        polygon(points_groove_top_inner(
+            groove_config = GrooveConfig(),
+            extra = mm(30)
+        ));
+        
+    }
+}
 
-module FloorHubCap() {
+/*module FloorHubCap(config = FloorConfig()) {
     difference() {
         BIAS = 0.1;
         union() {
@@ -24,13 +51,9 @@ module FloorHubCap() {
                     }
                 }
             }
-            translate([24,0]) {
-                LinearExtrude(z_from= -2.7, z_to=-1.5) square([8.0, .8], true);
-            }
+            BottomTopInnerHubSlots();
         }
-        translate([15,0]) {
-            LinearExtrude(z_from= -3, z_to=0.3) Hex(mm(5.6) + nozzle(4));
-        }
+        BottomHex(offset_xy = slot_clearance, offset_z = layer(0));
         LinearExtrude(z_from= 1, z_to = 3 + BIAS) {
             circle(d=6);
         }
@@ -47,4 +70,4 @@ module FloorHubCap() {
             circle(d = wheel_hub_diameter + groove_wheel_axcel_clearance_xy);
         }
     }
-}
+}*/

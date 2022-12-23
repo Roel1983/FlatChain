@@ -57,8 +57,6 @@ function LinkConfig(
             + 1 * thickness
         ), top_inner_side = (
             joint_size / 2
-        ), bottom_outer_side = (
-            top_outer_side + thickness
         ), bottom_inner_side = (
             top_outer_side - tolerance_xy
         ), bottom_outer_edge_radius = (
@@ -66,6 +64,8 @@ function LinkConfig(
                 size / 2 + sin(inner_angle) * joint_path_radius,
                 center_radius + cos(inner_angle) * joint_path_radius
             ]) + 1.5 * thickness + tolerance_xy
+        ), bottom_outer_side = (
+            bottom_outer_edge_radius - center_radius
         ), wheel_radius = (
             center_radius + tooth_size / 2
         )

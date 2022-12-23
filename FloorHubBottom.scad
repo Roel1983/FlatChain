@@ -4,12 +4,15 @@ include <../Utils/Git.inc>
 include <../Utils/LinearExtrude.inc>
 include <../Utils/Shapes.inc>
 include <../Utils/Units.inc>
-
 include <Floor.inc>
+
+link_config     = LinkConfig();
+groove_config   = GrooveConfig(link_config = link_config);
+floor_config    = FloorConfig(groove_config = groove_config);
 
 $fn = 64;
 
-FloorHubBottom(FloorConfig());
+FloorHubBottom(floor_config);
 
 module FloorHubBottom(config = FloorConfig()) {
 
