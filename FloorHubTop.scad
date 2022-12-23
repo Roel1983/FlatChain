@@ -38,6 +38,11 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
                     extra         = floor_hub_length - floor_width / 2 + BIAS
                 ));
             }
+            translate([-17.8,0, 0]) {
+                LinearExtrude(z_from = -layer(1.5), z_to=BIAS) {
+                    rotate(90) mirror(VEC_X) CommitText();
+                }
+            }
         }
         BottomTopOuterSlots(config);
     }

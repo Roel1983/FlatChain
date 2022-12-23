@@ -8,7 +8,7 @@ $fn=46;
 groove_config   = GrooveConfig();
 link_config     = ConfigGet(groove_config, "link_config");
 
-points = points_groove_bottom(extra = 10);
+points = points_groove_top(extra = 10);
 DebugPoints(points);
 polygon(points);
 
@@ -23,9 +23,13 @@ function points_groove_top_outer(
             ConfigGet(groove_config, "tolerance_xy_hub_top")
         ), link_config                   = (
             ConfigGet(groove_config, "link_config")
-        ), link_top_outer_side           = (
-            ConfigGet(link_config,   "top_outer_side")
-        ), link_top_outer_edge_radius = (
+        ), link_center_radius           = (
+            ConfigGet(link_config,   "center_radius")
+        ), link_size = (
+            ConfigGet(link_config,   "size")
+        ), link_joint_size = (
+            ConfigGet(link_config,   "joint_size")
+        ), link_top_outer_side = (
             ConfigGet(link_config,   "top_outer_side")
         )
     )
@@ -33,11 +37,13 @@ function points_groove_top_outer(
         link_config            = link_config,
         normal_offset_straight = (
             link_top_outer_side
-            + groove_tolerance_xy_straight_top / 2
         ),
         normal_offset_curve    = (
-            link_top_outer_edge_radius
-            + groove_tolerance_xy_hub_top / 2
+            norm([
+                link_center_radius + link_top_outer_side,
+                (link_size + link_joint_size) / 2
+            ]) - link_center_radius
+            + groove_tolerance_xy_straight_top / 2
         ),
         extra                  = extra
     )
@@ -151,6 +157,23 @@ function points_groove_bottom(
         ))
     )
 );
+
+function points_groove_top(
+    groove_config = GrooveConfig(),
+    extra
+) = (
+    concat(
+        points_groove_top_outer(
+            groove_config = groove_config,
+            extra         = extra
+        ),
+        points_reverse(points_groove_top_inner(
+            groove_config = groove_config,
+            extra         = extra
+        ))
+    )
+);
+
 
 function points_groove(
     link_config            = LinkConfig(),
