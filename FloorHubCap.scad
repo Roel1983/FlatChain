@@ -27,6 +27,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     wheel_radius         = ConfigGet(link_config, "wheel_radius");
     
     floor_hub_hexnut_pos = ConfigGet(config, "hub_hexnut_pos");
+    floor_hub_cap_size   = ConfigGet(config, "hub_cap_size");
     
     bearing_size = mm([6.0, 2.0]);
     wheel_hub_diameter   = bearing_size[X] - nozzle(1);
@@ -36,13 +37,13 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     
     BIAS = 0.1;
     
-    mirror_if(printable && !$preview, VEC_Z) {
+    rotate_if(printable && !$preview, 180, VEC_X) {
         difference() {
             union() {
                 LinearExtrude(z_from= -groove_seam_position, z_to = 0) {
                     polygon(points_groove_bottom_inner(
                         groove_config = GrooveConfig(),
-                        extra = mm(30)
+                        extra = floor_hub_cap_size
                     ));
                 }
                 hull() {
@@ -56,7 +57,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                 BottomTopInnerHubSlots(config);
                 translate([23,0, height]) {
                     LinearExtrude(z_from = -BIAS, z_to=layer(1.5)) {
-                        rotate(90) mirror(VEC_X) CommitText(len = 4);
+                        rotate(90) CommitText(len = 4);
                     }
                 }
             }
@@ -80,48 +81,8 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     module GrooveTopInner() {
         polygon(points_groove_top_inner(
             groove_config = GrooveConfig(),
-            extra = mm(30)
+            extra = floor_hub_cap_size
         ));
         
     }
 }
-
-/*module FloorHubCap(config = FloorConfig()) {
-    difference() {
-        BIAS = 0.1;
-        union() {
-            LinearExtrude(z_from= -2, z_to = -BIAS) {
-                polygon(points_bottom_inner(17.5));
-            }
-            hull() {
-                extra = .5;
-                LinearExtrude(z_from= -link_top_height + groove_tolerance_z, z_to = extra) {
-                    polygon(points_top_inner(17.5));
-                }
-                b = 2.5;
-                translate([0,0,b]) {
-                    LinearExtrude(z_from= -link_top_height + groove_tolerance_z, z_to = extra) {
-                        offset(-b)polygon(points_top_inner(17.5 - 3/2));
-                    }
-                }
-            }
-            BottomTopInnerHubSlots();
-        }
-        BottomHex(offset_xy = slot_clearance, offset_z = layer(0));
-        LinearExtrude(z_from= 1, z_to = 3 + BIAS) {
-            circle(d=6);
-        }
-        
-        LinearExtrude(z_from= -link_height, z_to = -link_top_height + groove_tolerance_z) {
-            circle(r = wheel_radius + groove_wheel_clearance_xy);
-        }
-        
-        translate([15,0]) {
-            translate([0, 0, .8]) cylinder(d1 = 3, d2 = 7, h=3);
-            LinearExtrude(z_from= -4, z_to=1) circle(d=mm(3.1));
-        }
-        LinearExtrude(z_from= -link_height, z_to = 3) {
-            circle(d = wheel_hub_diameter + groove_wheel_axcel_clearance_xy);
-        }
-    }
-}*/

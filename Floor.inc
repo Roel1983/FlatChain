@@ -13,6 +13,7 @@ function FloorConfig(
     hub_hexnut_size    = mm([5.5, 2.5]),
     hub_screw_diameter = mm(3.0),
     slot_clearance     = mm(0.05),
+    hub_cap_size       = mm(30.0)
 ) = Config(undef,
     "GrooveConfig",
     let(
@@ -34,6 +35,8 @@ function FloorConfig(
         ["hub_hexnut_size",    hub_hexnut_size],
         ["hub_screw_diameter", hub_screw_diameter],
         ["slot_clearance",     slot_clearance],
+        ["hub_cap_size",       hub_cap_size],
+        /* Derived */
         ["hub_hexnut_pos",     hub_hexnut_pos],
     ]
 );
