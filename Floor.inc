@@ -10,7 +10,7 @@ function FloorConfig(
     hub_length         = mm(60),
     thickness          = mm(3.8),
     hub_hexnut_wall    = nozzle(2),
-    hub_hexnut_size    = mm([5.5, 2.5]),
+    hub_hexnut_size    = mm([5.45, 2.5]),
     hub_screw_diameter = mm(3.0),
     slot_clearance     = mm(0.05),
     hub_cap_size       = mm(30.0)
