@@ -18,6 +18,7 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
     floor_hub_length     = ConfigGet(config, "hub_length");
     floor_width          = ConfigGet(config, "width");
     floor_thickness      = ConfigGet(config, "thickness");
+    floor_overlap        = ConfigGet(config, "overlap");
     floor_hub_position   = ConfigGet(config, "hub_position");
     groove_config        = ConfigGet(config, "groove_config");
     link_config          = ConfigGet(groove_config, "link_config");
@@ -26,21 +27,37 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
     
     rotate_if(printable && !$preview, 180, VEC_X) {
         difference() {
-            translate([floor_hub_position, 0]) {
-                BIAS = 0.1;
-                Box(
-                    x_from = -floor_width/2, 
-                    x_to   = floor_hub_length - floor_width/2, 
-                    y_from = -floor_width/2, 
-                    y_to   = floor_width/2, 
-                    z_from = -groove_seam_position, 
-                    z_to   = 0);
-            }
+            BIAS = 0.1;
+            LinearExtrude(
+                z_from = -groove_seam_position, 
+                z_to   = 0
+            ) polygon([
+                [
+                    0,
+                    floor_width/2
+                ], [
+                    floor_hub_length - floor_overlap,
+                    floor_width/2
+                ], [
+                    floor_hub_length - floor_overlap,
+                    0
+                ], [
+                    floor_hub_length + floor_overlap,
+                    0
+                ], [
+                    floor_hub_length + floor_overlap,
+                    -floor_width/2
+                ], [
+                    0,
+                    -floor_width/2
+                ]
+            
+            ]);
             translate([floor_hub_position, 0]) {
                 LinearExtrude(z_from= -groove_seam_position - BIAS, z_to = BIAS) {
                     polygon(points_groove_top_outer(
                         groove_config = groove_config,
-                        extra         = floor_hub_length - floor_width / 2 + BIAS
+                        extra         = floor_hub_length - floor_width / 2 + floor_overlap + BIAS
                     ));
                 }
                 LinearExtrude(
@@ -49,7 +66,7 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
                 ) {
                     polygon(points_groove_bottom_outer(
                         groove_config = groove_config,
-                        extra         = floor_hub_length - floor_width / 2 + BIAS
+                        extra         = floor_hub_length - floor_width / 2 + floor_overlap + BIAS
                     ));
                 }
                 translate([-17.6,0, 0]) {
@@ -63,5 +80,8 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
             BottomScrewHoles(config);
         }
         BottomTopOuterSlots(config);
+        translate([2 * floor_hub_length, 0])rotate(180) {
+            BottomSlotOuterOverlap(config);
+        }
     }
 }

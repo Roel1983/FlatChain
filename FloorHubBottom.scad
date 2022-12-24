@@ -235,7 +235,7 @@ module BottomSlotOuterOverlap(config, offset_xy = 0, offset_z = 0) {
         x_to   = floor_hub_length - floor_slot_edge_distance + offset_xy / 2,
         y_from = floor_width / 2 - floor_slot_edge_distance - floor_slot_width - offset_xy / 2,
         y_to   = floor_width / 2 - floor_slot_edge_distance + offset_xy / 2,
-        z_from = z_from, z_to = groove_seam_position + BIAS
+        z_from = z_from, z_to = -groove_seam_position + BIAS
     );
 
 }
