@@ -20,16 +20,19 @@ size            = ConfigGet(link_config, "size");
 joint_radius    = ConfigGet(link_config, "joint_radius");
 center_radius   = ConfigGet(link_config, "center_radius");
 angle           = ConfigGet(link_config, "angle");
+floor_hub_position = ConfigGet(floor_config, "hub_position");
 
-color("blue") Wheel(wheel_config);
-for (i = [0 : 4]) {
-    rotate(-i * angle) translate([0, -center_radius]) {
-        if(i % 2 == 0) {
-            color("red") render() LinkA(link_config);
-        } else {
-            color("green") LinkB(link_config);
+translate([floor_hub_position, 0]) {
+    color("blue") Wheel(wheel_config);
+    for (i = [0 : 4]) {
+        rotate(-i * angle) translate([0, -center_radius]) {
+            if(i % 2 == 0) {
+                color("red") render() LinkA(link_config);
+            } else {
+                color("green") LinkB(link_config);
+            }
         }
     }
-}
 
-translate([2*size, -joint_radius]) color("green") LinkB(link_config);
+    translate([2*size, -joint_radius]) color("green") LinkB(link_config);
+}

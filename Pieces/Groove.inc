@@ -18,6 +18,7 @@ function GrooveConfig(
     let(
         link_height            = ConfigGet(link_config, "height"),
         link_top_height        = ConfigGet(link_config, "top_height"),
+        link_center_radius     = ConfigGet(link_config, "center_radius"),
         link_joint_radius      = ConfigGet(link_config, "joint_radius"),
         link_bottom_inner_side = ConfigGet(link_config, "bottom_inner_side"),
         link_top_outer_side    = ConfigGet(link_config, "top_outer_side"),
@@ -45,6 +46,10 @@ function GrooveConfig(
             link_joint_radius
             + link_bottom_outer_side
             + tolerance_xy_straight_bottom / 2
+        ), hub_bottom_outer = (
+            link_center_radius 
+            + link_bottom_outer_side
+            + tolerance_xy_hub_bottom / 2
         )
     ) [
         ["link_config",                  link_config],
@@ -62,7 +67,8 @@ function GrooveConfig(
         ["straight_top_inner",           straight_top_inner],
         ["straight_top_outer",           straight_top_outer],
         ["straight_bottom_inner",        straight_bottom_inner],
-        ["straight_bottom_outer" ,       straight_bottom_outer]
+        ["straight_bottom_outer" ,       straight_bottom_outer],
+        ["hub_bottom_outer",             hub_bottom_outer]
     ]
 );
 

@@ -4,6 +4,7 @@ include <../Utils/Git.inc>
 include <../Utils/LinearExtrude.inc>
 include <../Utils/Shapes.inc>
 include <../Utils/Units.inc>
+include <../Utils/TransformCopy.inc>
 include <Floor.inc>
 
 link_config     = LinkConfig();
@@ -35,6 +36,7 @@ module FloorHubBottom(config = FloorConfig()) {
     slot_clearance           = ConfigGet(config, "slot_clearance");
 
     floor_hub_hexnut_pos     = ConfigGet(config, "hub_hexnut_pos");
+    floor_hub_position       = ConfigGet(config, "hub_position");
 
     difference() {
         BIAS = .1;
@@ -45,25 +47,32 @@ module FloorHubBottom(config = FloorConfig()) {
             ) {
                 difference() {
                     Box(
-                        x_from = -floor_width / 2,
-                        x_to   = floor_hub_length - floor_width / 2,
+                        x_from = 0,
+                        x_to   = floor_hub_length,
                         y_from = -floor_width / 2,
                         y_to   = floor_width / 2
                     );
-                    circle(d=mm(3.1));
+                    translate([floor_hub_position, 0]) {
+                        circle(d=mm(3.1));
+                    }
                 }
             }
             BottomHex(config);
         }
-        LinearExtrude(z_to = -floor_thickness - BIAS, z_from = -floor_thickness + layer(1.5)) {
-            translate([floor_width/4,0])rotate(-90) CommitText();
-        }
-        LinearExtrude(z_from= -groove_depth, z_to = 0) {
-            polygon(points_groove_bottom(
-                groove_config = groove_config,
-                extra         = floor_hub_length - floor_width / 2 + BIAS
-            ));
-            circle(r = wheel_radius + groove_wheel_clearance_xy);
+        translate([floor_hub_position, 0]) {
+            LinearExtrude(
+                z_to = -floor_thickness - BIAS,
+                z_from = -floor_thickness + layer(1.5)
+            ) {
+                translate([floor_width/4/*TODO*/,0])rotate(-90) CommitText();
+            }
+            LinearExtrude(z_from= -groove_depth, z_to = 0) {
+                polygon(points_groove_bottom(
+                    groove_config = groove_config,
+                    extra         = floor_hub_length - floor_width / 2 + BIAS
+                ));
+                circle(r = wheel_radius + groove_wheel_clearance_xy);
+            }
         }
         translate([
             floor_hub_hexnut_pos,
@@ -83,6 +92,7 @@ module FloorHubBottom(config = FloorConfig()) {
             }
         }
         BottomSlots(config, offset_xy=slot_clearance, offset_z=layer(1));
+        BottomScrewHoles(config);
     }
 }
 
@@ -99,38 +109,154 @@ module BottomHex(config, offset_xy = 0, offset_z = 0) {
     }
 }
 
-module BottomTopInnerHubSlots(config, offset_xy = 0, offset_z = 0) {
+module BottomSlotHub(config, offset_xy = 0, offset_z = 0) {
+    
+    floor_hub_length      = ConfigGet(config, "hub_length");
+    floor_slot_width      = ConfigGet(config, "slot_width");
+    floor_overlap         = ConfigGet(config, "overlap");
+    floor_hub_hexnut_size = ConfigGet(config, "hub_hexnut_size");
+    floor_hub_hexnut_wall = ConfigGet(config, "hub_hexnut_wall");
+    floor_slot_clearance  = ConfigGet(config, "slot_clearance");
+    floor_slot_edge_distance  = ConfigGet(config, "slot_edge_distance");
+    floor_hub_hexnut_pos      = ConfigGet(config, "hub_hexnut_pos");
+    
+    groove_config             = ConfigGet(config,        "groove_config");
+    groove_seam_position      = ConfigGet(groove_config, "seam_position");
+    
     z_from = -mm(2.7) - offset_z;
-    width  = nozzle(2) + offset_xy;
-    translate([24,0]) {
-        LinearExtrude(z_from= z_from, z_to=-1.5) square([8.1, width], true);
-    }   
+    BIAS = 0.1;
+    
+    Box(
+        x_from = (
+            floor_hub_hexnut_pos 
+            + floor_hub_hexnut_size[X] / 2
+            + floor_hub_hexnut_wall
+            + floor_slot_edge_distance
+        ) - offset_xy / 2,
+        x_to   = (
+            floor_hub_length
+            - floor_overlap
+            - floor_slot_edge_distance
+        ) + offset_xy / 2,
+        y_from = - floor_slot_width / 2 - offset_xy / 2,
+        y_to   = floor_slot_width / 2 + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
+}
+
+module BottomSlotInnerOverlap(config, offset_xy = 0, offset_z = 0) {
+    groove_config             = ConfigGet(config,        "groove_config");
+    groove_seam_position      = ConfigGet(groove_config, "seam_position");
+    floor_hub_length = ConfigGet(config, "hub_length");
+    floor_width      = ConfigGet(config, "width");
+    floor_overlap    = ConfigGet(config, "overlap");
+    floor_slot_width = ConfigGet(config, "slot_width");
+    floor_slot_edge_distance = ConfigGet(config, "slot_edge_distance");
+    
+    z_from = -mm(2.7) - offset_z;
+    BIAS = 0.1;
+    Box(
+        x_from = floor_hub_length - floor_overlap + floor_slot_edge_distance - offset_xy / 2,
+        x_to   = floor_hub_length - floor_slot_edge_distance + offset_xy / 2,
+        y_from = - floor_slot_width / 2 - offset_xy / 2,
+        y_to   = floor_slot_width / 2 + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
 }
 
 module BottomTopOuterSlots(config, offset_xy = 0, offset_z = 0) {
+    groove_config             = ConfigGet(config,        "groove_config");
+    groove_seam_position      = ConfigGet(groove_config, "seam_position");
+    floor_hub_length = ConfigGet(config, "hub_length");
+    floor_width      = ConfigGet(config, "width");
+    floor_overlap    = ConfigGet(config, "overlap");
+    floor_slot_width = ConfigGet(config, "slot_width");
+    floor_slot_edge_distance = ConfigGet(config, "slot_edge_distance");
+    
     z_from = -mm(2.7) - offset_z;
-    width  = nozzle(2) + offset_xy;
-    translate([-18,0]) {
-        LinearExtrude(z_from= z_from, z_to=-1.5) square([width, 18.1], true);
-    }
-    translate([15,18]) {
-        LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
-    }
-    translate([15,-18]) {
-        LinearExtrude(z_from= z_from, z_to=-1.5) square([30.1, width], true);
-    }
+    BIAS = 0.1;
+    Box(
+        x_from = floor_slot_edge_distance - offset_xy / 2,
+        x_to   = floor_slot_edge_distance + floor_slot_width + offset_xy / 2,
+        y_from = -floor_width / 2 + 10 - offset_xy / 2,
+        y_to   = floor_width / 2 - 10 + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
+    Box(
+        x_from = 10 - offset_xy / 2,
+        x_to   = floor_hub_length / 2 - floor_slot_edge_distance + offset_xy / 2,
+        y_from = floor_width / 2 - floor_slot_edge_distance - floor_slot_width - offset_xy / 2,
+        y_to   = floor_width / 2 - floor_slot_edge_distance + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
+    Box(
+        x_from = floor_hub_length / 2 + floor_slot_edge_distance - offset_xy / 2,
+        x_to   = (
+            floor_hub_length
+            - floor_overlap
+            - floor_slot_edge_distance
+        ) + offset_xy / 2,
+        y_from = floor_width / 2 - floor_slot_edge_distance - floor_slot_width - offset_xy / 2,
+        y_to   = floor_width / 2 - floor_slot_edge_distance + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
+    
+    Box(
+        x_from = 10 - offset_xy / 2,
+        x_to   = floor_hub_length / 2 - floor_slot_edge_distance + offset_xy / 2,
+        y_from = -floor_width / 2 + floor_slot_edge_distance - offset_xy / 2,
+        y_to   = -floor_width / 2 + floor_slot_edge_distance + floor_slot_width + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
+    Box(
+        x_from = floor_hub_length / 2 + floor_slot_edge_distance - offset_xy / 2,
+        x_to   = floor_hub_length - floor_slot_edge_distance + offset_xy / 2,
+        y_from = -floor_width / 2 + floor_slot_edge_distance - offset_xy / 2,
+        y_to   = -floor_width / 2 + floor_slot_edge_distance + floor_slot_width + offset_xy / 2,
+        z_from = z_from, z_to = -groove_seam_position + BIAS
+    );
+    
 }
 
-module BottomTopInnerStraight(config, offset_xy = 0, offset_z = 0) {
+module BottomSlotOuterOverlap(config, offset_xy = 0, offset_z = 0) {
+    groove_config             = ConfigGet(config,        "groove_config");
+    groove_seam_position      = ConfigGet(groove_config, "seam_position");
+    floor_hub_length = ConfigGet(config, "hub_length");
+    floor_width      = ConfigGet(config, "width");
+    floor_overlap    = ConfigGet(config, "overlap");
+    floor_slot_width = ConfigGet(config, "slot_width");
+    floor_slot_edge_distance = ConfigGet(config, "slot_edge_distance");
+    
     z_from = -mm(2.7) - offset_z;
     width  = nozzle(2) + offset_xy;
-    translate([34.5,0]) {
-        LinearExtrude(z_from= z_from, z_to=-1.5) square([6.1, width], true);
-    }
+    BIAS = 0.1;
+    Box(
+        x_from = floor_hub_length - floor_overlap + floor_slot_edge_distance - offset_xy / 2,
+        x_to   = floor_hub_length - floor_slot_edge_distance + offset_xy / 2,
+        y_from = floor_width / 2 - floor_slot_edge_distance - floor_slot_width - offset_xy / 2,
+        y_to   = floor_width / 2 - floor_slot_edge_distance + offset_xy / 2,
+        z_from = z_from, z_to = groove_seam_position + BIAS
+    );
+
 }
 
 module BottomSlots(config, offset_xy = 0, offset_z = 0) {
-    BottomTopInnerHubSlots(config, offset_xy, offset_z);
-    BottomTopOuterSlots(config, offset_xy, offset_z);
-    BottomTopInnerStraight(config, offset_xy, offset_z);
+    BottomSlotOuterOverlap(config, offset_xy, offset_z);
+    BottomSlotInnerOverlap(config, offset_xy, offset_z);
+    BottomSlotHub         (config, offset_xy, offset_z);
+    BottomTopOuterSlots   (config, offset_xy, offset_z);
+}
+
+module BottomScrewHoles(config) {
+    floor_width      = ConfigGet(config, "width");
+    floor_thickness  = ConfigGet(config, "thickness");
+    mirror_copy(VEC_Y) {
+        BIAS = 0.1;
+        translate([5, floor_width / 2 - 5, BIAS]) {
+            mirror(VEC_Z) {
+                cylinder(d1 = 7, d2 = 3, h = 2);
+                cylinder(d=3.1, h = floor_thickness + 2 * BIAS);
+            }
+        }
+    }
 }

@@ -9,7 +9,7 @@ $fn=46;
 groove_config   = GrooveConfig();
 link_config     = ConfigGet(groove_config, "link_config");
 
-points = points_groove_top_outer(extra = 20);
+points = points_groove_bottom_outer(extra = 20);
 DebugPoints(points);
 polygon(points);
 

@@ -19,6 +19,7 @@ module FloorHubTopInner(config = FloorConfig(), printable = false) {
     
     floor_hub_length     = ConfigGet(config, "hub_length");
     floor_width          = ConfigGet(config, "width");
+    floor_overlap        = ConfigGet(config, "overlap");
     link_config          = ConfigGet(groove_config, "link_config");
     groove_depth         = ConfigGet(groove_config, "depth");
     groove_seam_position      = ConfigGet(groove_config, "seam_position");
@@ -29,21 +30,25 @@ module FloorHubTopInner(config = FloorConfig(), printable = false) {
     
     rotate_if(printable && !$preview, 180, VEC_X) {
         Box(
-            x_from = hub_cap_size,
-            x_to   = floor_hub_length - floor_width / 2,
+            x_from = floor_hub_length - floor_overlap,
+            x_to   = floor_hub_length + floor_overlap,
             y_from = -straight_top_inner,
             y_to   = straight_top_inner,
             z_from = -groove_overhang_thickness,
             z_to   = 0
         );
         Box(
-            x_from = hub_cap_size,
-            x_to   = floor_hub_length - floor_width / 2,
+            x_from = floor_hub_length - floor_overlap,
+            x_to   = floor_hub_length + floor_overlap,
             y_from = -straight_bottom_inner,
             y_to   = straight_bottom_inner,
             z_from = -groove_seam_position,
             z_to   = 0
         );
-        BottomTopInnerStraight(config);
+        BottomSlotInnerOverlap(config);
+        
+        translate([2 * floor_hub_length, 0])rotate(180) {
+            BottomSlotInnerOverlap(config);
+        }
     }
 }
