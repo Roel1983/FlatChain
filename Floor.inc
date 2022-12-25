@@ -5,15 +5,16 @@ include <../Utils/Units.inc>
 include <Pieces/Groove.inc>
 
 function FloorConfig(
-    groove_config      = GrooveConfig(),
-    width              = mm(40.0),
-    hub_length         = mm(60.0),
-    overlap            = mm(10.0),
-    thickness          = mm(3.8),
-    hub_hexnut_wall    = nozzle(2),
-    hub_hexnut_size    = mm([5.45, 2.5]),
-    hub_screw_diameter = mm(3.0),
-    slot_clearance     = mm(0.03)
+    groove_config       = GrooveConfig(),
+    width               = mm(40.0),
+    hub_length          = mm(60.0),
+    overlap             = mm(10.0),
+    thickness           = mm(3.8),
+    hub_hexnut_wall     = nozzle(2),
+    hub_hexnut_size     = mm([5.45, 2.5]),
+    hub_screw_diameter  = mm(3.0),
+    slot_clearance      = mm(0.03),
+    straight_link_count = 30,
 ) = Config(undef,
     "GrooveConfig",
     let(
@@ -49,6 +50,8 @@ function FloorConfig(
             hub_length
             - hub_position
             - overlap
+        ), straight_len = (
+            straight_link_count * link_size
         )
     ) [
         ["groove_config",      groove_config],
@@ -61,11 +64,13 @@ function FloorConfig(
         ["hub_screw_diameter", hub_screw_diameter],
         ["slot_clearance",     slot_clearance],
         ["hub_cap_size",       hub_cap_size],
+        ["straight_link_count", straight_link_count],
         /* Derived */
         ["hub_hexnut_pos",     hub_hexnut_pos],
         ["hub_position",       hub_position],
         ["slot_width",         slot_width],
         ["slot_edge_distance", slot_edge_distance],
-        ["min_wall_thickness", min_wall_thickness]
+        ["min_wall_thickness", min_wall_thickness],
+        ["straight_len",       straight_len]
     ]
 );

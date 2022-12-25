@@ -45,10 +45,10 @@ module FloorHubTopInner(config = FloorConfig(), printable = false) {
             z_from = -groove_seam_position,
             z_to   = 0
         );
-        BottomSlotInnerOverlap(config);
+        FloorHubBottomSlotInnerOverlap(config);
         
         translate([2 * floor_hub_length, 0])rotate(180) {
-            BottomSlotInnerOverlap(config);
+            FloorHubBottomSlotInnerOverlap(config);
         }
     }
 }

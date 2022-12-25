@@ -77,11 +77,11 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
                 
                 
             }
-            BottomScrewHoles(config);
+            FloorHubBottomScrewHoles(config);
         }
-        BottomTopOuterSlots(config);
+        FloorHubBottomTopOuterSlots(config);
         translate([2 * floor_hub_length, 0])rotate(180) {
-            BottomSlotOuterOverlap(config);
+            FloorHubBottomSlotOuterOverlap(config);
         }
     }
 }

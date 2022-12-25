@@ -57,7 +57,7 @@ module FloorHubBottom(config = FloorConfig()) {
                     }
                 }
             }
-            BottomHex(config);
+            FloorHubBottomHex(config);
         }
         translate([floor_hub_position, 0]) {
             LinearExtrude(
@@ -91,12 +91,12 @@ module FloorHubBottom(config = FloorConfig()) {
                 }
             }
         }
-        BottomSlots(config, offset_xy=slot_clearance, offset_z=layer(1));
-        BottomScrewHoles(config);
+        FloorHubBottomSlots(config, offset_xy=slot_clearance, offset_z=layer(1));
+        FloorHubBottomScrewHoles(config);
     }
 }
 
-module BottomHex(config, offset_xy = 0, offset_z = 0) {
+module FloorHubBottomHex(config, offset_xy = 0, offset_z = 0) {
     floor_hub_hexnut_pos  = ConfigGet(config, "hub_hexnut_pos");
     floor_thickness       = ConfigGet(config, "thickness");
     floor_hub_hexnut_wall = ConfigGet(config, "hub_hexnut_wall");
@@ -109,7 +109,7 @@ module BottomHex(config, offset_xy = 0, offset_z = 0) {
     }
 }
 
-module BottomSlotHub(config, offset_xy = 0, offset_z = 0) {
+module FloorHubBottomSlotHub(config, offset_xy = 0, offset_z = 0) {
     
     floor_hub_length      = ConfigGet(config, "hub_length");
     floor_slot_width      = ConfigGet(config, "slot_width");
@@ -144,7 +144,7 @@ module BottomSlotHub(config, offset_xy = 0, offset_z = 0) {
     );
 }
 
-module BottomSlotInnerOverlap(config, offset_xy = 0, offset_z = 0) {
+module FloorHubBottomSlotInnerOverlap(config, offset_xy = 0, offset_z = 0) {
     groove_config             = ConfigGet(config,        "groove_config");
     groove_seam_position      = ConfigGet(groove_config, "seam_position");
     floor_hub_length = ConfigGet(config, "hub_length");
@@ -164,7 +164,7 @@ module BottomSlotInnerOverlap(config, offset_xy = 0, offset_z = 0) {
     );
 }
 
-module BottomTopOuterSlots(config, offset_xy = 0, offset_z = 0) {
+module FloorHubBottomTopOuterSlots(config, offset_xy = 0, offset_z = 0) {
     groove_config             = ConfigGet(config,        "groove_config");
     groove_seam_position      = ConfigGet(groove_config, "seam_position");
     floor_hub_length = ConfigGet(config, "hub_length");
@@ -218,7 +218,7 @@ module BottomTopOuterSlots(config, offset_xy = 0, offset_z = 0) {
     
 }
 
-module BottomSlotOuterOverlap(config, offset_xy = 0, offset_z = 0) {
+module FloorHubBottomSlotOuterOverlap(config, offset_xy = 0, offset_z = 0) {
     groove_config             = ConfigGet(config,        "groove_config");
     groove_seam_position      = ConfigGet(groove_config, "seam_position");
     floor_hub_length = ConfigGet(config, "hub_length");
@@ -240,14 +240,14 @@ module BottomSlotOuterOverlap(config, offset_xy = 0, offset_z = 0) {
 
 }
 
-module BottomSlots(config, offset_xy = 0, offset_z = 0) {
-    BottomSlotOuterOverlap(config, offset_xy, offset_z);
-    BottomSlotInnerOverlap(config, offset_xy, offset_z);
-    BottomSlotHub         (config, offset_xy, offset_z);
-    BottomTopOuterSlots   (config, offset_xy, offset_z);
+module FloorHubBottomSlots(config, offset_xy = 0, offset_z = 0) {
+    FloorHubBottomSlotOuterOverlap(config, offset_xy, offset_z);
+    FloorHubBottomSlotInnerOverlap(config, offset_xy, offset_z);
+    FloorHubBottomSlotHub         (config, offset_xy, offset_z);
+    FloorHubBottomTopOuterSlots   (config, offset_xy, offset_z);
 }
 
-module BottomScrewHoles(config) {
+module FloorHubBottomScrewHoles(config) {
     floor_width      = ConfigGet(config, "width");
     floor_thickness  = ConfigGet(config, "thickness");
     mirror_copy(VEC_Y) {

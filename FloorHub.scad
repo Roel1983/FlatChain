@@ -24,7 +24,7 @@ floor_hub_position = ConfigGet(floor_config, "hub_position");
 
 translate([floor_hub_position, 0]) {
     color("blue") Wheel(wheel_config);
-    for (i = [0 : 4]) {
+    for (i = [1 : 3]) {
         rotate(-i * angle) translate([0, -center_radius]) {
             if(i % 2 == 0) {
                 color("red") render() LinkA(link_config);
@@ -34,5 +34,5 @@ translate([floor_hub_position, 0]) {
         }
     }
 
-    translate([2*size, -joint_radius]) color("green") LinkB(link_config);
+    translate([1*size, -joint_radius]) color("green") LinkB(link_config);
 }

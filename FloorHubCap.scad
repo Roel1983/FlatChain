@@ -58,7 +58,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                         }
                     }
                 }
-                BottomSlotHub(config);
+                FloorHubBottomSlotHub(config);
             }
             translate([floor_hub_position, 0]) {
                 translate([23,0, height]) {
@@ -85,7 +85,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                 }
                 LinearExtrude(z_from= -4, z_to=height) circle(d=mm(3.1));
             }
-            BottomHex(config, offset_xy = slot_clearance, offset_z = layer(0));
+            FloorHubBottomHex(config, offset_xy = slot_clearance, offset_z = layer(0));
         }
     }
     
