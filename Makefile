@@ -7,5 +7,6 @@ PARTS += FloorHubTop
 PARTS += FloorHubTopInner
 PARTS += FloorStraightBottom
 PARTS += FloorStraightTopInner
+PARTS += FloorStraightTopOuter
 include ../Utils/build.mk
 

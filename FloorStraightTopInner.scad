@@ -14,19 +14,15 @@ floor_config    = FloorConfig(groove_config = groove_config);
 FloorStraightTopInner(floor_config, printable = true);
 
 module FloorStraightTopInner(config = FloorConfig(), printable = false) {
-    
-    hub_cap_size       = ConfigGet(config, "hub_cap_size");
-    
-    floor_width          = ConfigGet(config, "width");
-    floor_overlap        = ConfigGet(config, "overlap");
-    floor_straight_len           = ConfigGet(config,        "straight_len");
-    link_config          = ConfigGet(groove_config, "link_config");
-    groove_depth         = ConfigGet(groove_config, "depth");
+    hub_cap_size              = ConfigGet(config, "hub_cap_size");
+    floor_overlap             = ConfigGet(config, "overlap");
+    floor_straight_len        = ConfigGet(config,        "straight_len");
+    link_config               = ConfigGet(groove_config, "link_config");
+    groove_depth              = ConfigGet(groove_config, "depth");
     groove_seam_position      = ConfigGet(groove_config, "seam_position");
     groove_overhang_thickness = ConfigGet(groove_config, "overhang_thickness");
-    
-    straight_top_inner = ConfigGet(groove_config, "straight_top_inner");
-    straight_bottom_inner = ConfigGet(groove_config, "straight_bottom_inner");
+    straight_top_inner        = ConfigGet(groove_config, "straight_top_inner");
+    straight_bottom_inner     = ConfigGet(groove_config, "straight_bottom_inner");
     
     rotate_if(printable && !$preview, 180, VEC_X) {
         Box(
