@@ -1,3 +1,4 @@
+include <../Utils/Box.inc>
 include <../Utils/LinearExtrude.inc>
 include <../Utils/TransformIf.inc>
 include <../Utils/Git.inc>
@@ -15,6 +16,7 @@ FloorHubCap(floor_config, printable = true);
 module FloorHubCap(config = FloorConfig(), printable=false) {
     
     slot_clearance       = ConfigGet(config, "slot_clearance");
+    floor_hub_length     = ConfigGet(config, "hub_length");
     floor_hub_position   = ConfigGet(config, "hub_position");
     groove_config        = ConfigGet(config, "groove_config");
     overhang_thickness   = ConfigGet(groove_config, "overhang_thickness");
@@ -27,7 +29,6 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     link_top_height      = ConfigGet(link_config, "top_height");
     wheel_radius         = ConfigGet(link_config, "wheel_radius");
     
-    
     floor_hub_hexnut_pos = ConfigGet(config, "hub_hexnut_pos");
     floor_hub_cap_size   = ConfigGet(config, "hub_cap_size");
     echo("floor_hub_cap_size", floor_hub_cap_size);
@@ -36,6 +37,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     
     extra  = mm(1.0);
     height = mm(3.5);
+    cap_overlap = mm(0.6);
     
     BIAS = 0.1;
     
@@ -60,6 +62,14 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                 }
                 FloorHubBottomSlotHub(config);
             }
+            Box(
+                x_from = floor_hub_cap_size + floor_hub_position,
+                x_to   = floor_hub_cap_size + floor_hub_position + cap_overlap + BIAS,
+                y_from = -wheel_radius,
+                y_to   = wheel_radius,
+                z_from = -groove_seam_position,
+                z_to   = mm(0)
+            );
             translate([floor_hub_position, 0]) {
                 translate([23,0, height]) {
                     LinearExtrude(z_from = -layer(1.5), z_to=BIAS) {
@@ -92,7 +102,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     module GrooveTopInner() {
         polygon(points_groove_top_inner(
             groove_config = GrooveConfig(),
-            extra = floor_hub_cap_size
+            extra = floor_hub_cap_size + cap_overlap
         ));
         
     }
