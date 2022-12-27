@@ -37,7 +37,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     
     extra  = mm(1.0);
     height = mm(3.5);
-    cap_overlap = mm(0.6);
+    cap_overlap = mm(1.0);
     
     BIAS = 0.1;
     
@@ -95,7 +95,7 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
                 }
                 LinearExtrude(z_from= -4, z_to=height) circle(d=mm(3.1));
             }
-            FloorHubBottomHex(config, offset_xy = slot_clearance, offset_z = layer(0));
+            FloorHubBottomHex(config, offset_xy = slot_clearance, offset_z = layer(1));
         }
     }
     
