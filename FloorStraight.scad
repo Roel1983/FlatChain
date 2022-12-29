@@ -21,8 +21,6 @@ module FloorStraight(floor_config = FloorConfig()) {
     size               = ConfigGet(link_config, "size");
     joint_radius       = ConfigGet(link_config, "joint_radius");
     
-    echo(floor_straight_len, size, joint_radius);
-    
     FloorStraightBottom(floor_config);
     FloorStraightTopInner(floor_config);
     FloorStraightTopOuter(floor_config);

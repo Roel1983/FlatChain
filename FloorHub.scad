@@ -10,9 +10,9 @@ link_config     = LinkConfig();
 groove_config   = GrooveConfig(link_config = link_config);
 floor_config    = FloorConfig(groove_config = groove_config);
 
-FloorHub(floor_config);
+FloorHub(floor_config, show_links = true);
 
-module FloorHub(floor_config = FloorConfig()) {
+module FloorHub(floor_config = FloorConfig(), show_links = false) {
     
     FloorHubBottom(floor_config);
     FloorHubCap(floor_config);
@@ -28,18 +28,20 @@ module FloorHub(floor_config = FloorConfig()) {
     angle           = ConfigGet(link_config, "angle");
     floor_hub_position = ConfigGet(floor_config, "hub_position");
 
-    translate([floor_hub_position, 0]) {
-        color("blue") Wheel(wheel_config);
-        for (i = [1 : 3]) {
-            rotate(-i * angle) translate([0, -center_radius]) {
-                if(i % 2 == 0) {
-                    color("red") render() LinkA(link_config);
-                } else {
-                    color("green") LinkB(link_config);
+    if(show_links) {
+        translate([floor_hub_position, 0]) {
+            color("blue") Wheel(wheel_config);
+            for (i = [1 : 3]) {
+                rotate(-i * angle) translate([0, -center_radius]) {
+                    if(i % 2 == 0) {
+                        color("red") render() LinkA(link_config);
+                    } else {
+                        color("green") LinkB(link_config);
+                    }
                 }
             }
-        }
 
-        translate([1*size, -joint_radius]) color("green") LinkB(link_config);
+            translate([1*size, -joint_radius]) color("green") LinkB(link_config);
+        }
     }
 }

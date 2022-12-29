@@ -7,7 +7,8 @@ include <Pieces/Groove.inc>
 function FloorConfig(
     groove_config       = GrooveConfig(),
     width               = mm(40.0),
-    hub_length          = mm(60.0),
+    hub_length          = mm(160.0),
+    hub_cap_size        = mm(30.0),
     overlap             = mm(10.0),
     thickness           = mm(3.8),
     hub_hexnut_wall     = nozzle(2),
@@ -46,14 +47,14 @@ function FloorConfig(
             + hub_hexnut_wall * 2 + slot_clearance
             + hub_hexnut_size[X] / 2
             + hub_position
-        ), hub_cap_size = (
+        ), max_hub_cap_size = (
             hub_length
             - hub_position
             - overlap
         ), straight_len = (
             straight_link_count * link_size
         )
-    ) [
+    ) assert( hub_cap_size <= max_hub_cap_size)[
         ["groove_config",      groove_config],
         ["width",              width],
         ["hub_length",         hub_length],

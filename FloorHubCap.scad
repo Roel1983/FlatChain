@@ -31,7 +31,6 @@ module FloorHubCap(config = FloorConfig(), printable=false) {
     
     floor_hub_hexnut_pos = ConfigGet(config, "hub_hexnut_pos");
     floor_hub_cap_size   = ConfigGet(config, "hub_cap_size");
-    echo("floor_hub_cap_size", floor_hub_cap_size);
     bearing_size = mm([6.0, 2.0]);
     wheel_hub_diameter   = bearing_size[X] - nozzle(1);
     

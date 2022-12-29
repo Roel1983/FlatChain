@@ -116,6 +116,8 @@ module FloorHubBottomSlotHub(config, offset_xy = 0, offset_z = 0) {
     floor_overlap         = ConfigGet(config, "overlap");
     floor_hub_hexnut_size = ConfigGet(config, "hub_hexnut_size");
     floor_hub_hexnut_wall = ConfigGet(config, "hub_hexnut_wall");
+    floor_hub_cap_size   = ConfigGet(config, "hub_cap_size");
+    floor_hub_position   = ConfigGet(config, "hub_position");
     floor_slot_clearance  = ConfigGet(config, "slot_clearance");
     floor_slot_edge_distance  = ConfigGet(config, "slot_edge_distance");
     floor_hub_hexnut_pos      = ConfigGet(config, "hub_hexnut_pos");
@@ -134,8 +136,7 @@ module FloorHubBottomSlotHub(config, offset_xy = 0, offset_z = 0) {
             + floor_slot_edge_distance
         ) - offset_xy / 2,
         x_to   = (
-            floor_hub_length
-            - floor_overlap
+            floor_hub_position + floor_hub_cap_size
             - floor_slot_edge_distance
         ) + offset_xy / 2,
         y_from = - floor_slot_width / 2 - offset_xy / 2,
