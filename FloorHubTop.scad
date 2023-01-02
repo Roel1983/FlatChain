@@ -57,7 +57,7 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
                 LinearExtrude(z_from= -groove_seam_position - BIAS, z_to = BIAS) {
                     polygon(points_groove_top_outer(
                         groove_config = groove_config,
-                        extra         = floor_hub_length - floor_width / 2 + floor_overlap + BIAS
+                        extra         = floor_hub_length - floor_hub_position / 2 + floor_overlap + BIAS
                     ));
                 }
                 LinearExtrude(
@@ -66,7 +66,7 @@ module FloorHubTop(config = FloorConfig(), printable=false) {
                 ) {
                     polygon(points_groove_bottom_outer(
                         groove_config = groove_config,
-                        extra         = floor_hub_length - floor_width / 2 + floor_overlap + BIAS
+                        extra         = floor_hub_length - floor_hub_position / 2 + floor_overlap + BIAS
                     ));
                 }
                 translate([-17.6,0, 0]) {
