@@ -13,7 +13,11 @@ floor_config    = FloorConfig(groove_config = groove_config);
 
 FloorHubTopInner(floor_config, printable = true);
 
-module FloorHubTopInner(config = FloorConfig(), printable = false) {
+module FloorHubTopInner(
+    config        = FloorConfig(),
+    printable     = false,
+    inner_overlap = false
+) {
     
     hub_cap_size       = ConfigGet(config, "hub_cap_size");
     
@@ -31,9 +35,10 @@ module FloorHubTopInner(config = FloorConfig(), printable = false) {
     straight_bottom_inner = ConfigGet(groove_config, "straight_bottom_inner");
     
     rotate_if(printable && !$preview, 180, VEC_X) {
+        overlap = (inner_overlap ? 1 : -1) * floor_overlap;
         Box(
             x_from = floor_hub_position + floor_hub_cap_size,
-            x_to   = floor_hub_length + floor_overlap,
+            x_to   = floor_hub_length + overlap,
             y_from = -straight_top_inner,
             y_to   = straight_top_inner,
             z_from = -groove_overhang_thickness,
@@ -41,16 +46,18 @@ module FloorHubTopInner(config = FloorConfig(), printable = false) {
         );
         Box(
             x_from = floor_hub_position + floor_hub_cap_size,
-            x_to   = floor_hub_length + floor_overlap,
+            x_to   = floor_hub_length + overlap,
             y_from = -straight_bottom_inner,
             y_to   = straight_bottom_inner,
             z_from = -groove_seam_position,
             z_to   = 0
         );
-        FloorHubBottomSlotInnerOverlap(config);
         
-        translate([2 * floor_hub_length, 0])rotate(180) {
+        if (inner_overlap) {
             FloorHubBottomSlotInnerOverlap(config);
+            translate([2 * floor_hub_length, 0])rotate(180) {
+                FloorHubBottomSlotInnerOverlap(config);
+            }
         }
     }
 }

@@ -12,12 +12,16 @@ floor_config    = FloorConfig(groove_config = groove_config);
 
 FloorHub(floor_config, show_links = true);
 
-module FloorHub(floor_config = FloorConfig(), show_links = false) {
+module FloorHub(
+    floor_config  = FloorConfig(),
+    show_links    = false,
+    inner_overlap = false
+) {
     
     FloorHubBottom(floor_config);
     FloorHubCap(floor_config);
     FloorHubTop(floor_config);
-    FloorHubTopInner(floor_config);
+    FloorHubTopInner(floor_config, inner_overlap = inner_overlap);
 
     groove_config   = ConfigGet(floor_config, "groove_config");
     link_config     = ConfigGet(groove_config, "link_config");
