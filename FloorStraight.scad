@@ -1,6 +1,7 @@
 use <FloorStraightBottom.scad>
 use <FloorStraightTopInner.scad>
-use <FloorStraightTopOuter.scad>
+use <FloorStraightTopLeft.scad>
+use <FloorStraightTopRight.scad>
 include <Floor.inc>
 include <LinkA.inc>
 include <LinkB.inc>
@@ -23,11 +24,8 @@ module FloorStraight(floor_config = FloorConfig()) {
     
     FloorStraightBottom(floor_config);
     FloorStraightTopInner(floor_config);
-    FloorStraightTopOuter(floor_config);
-    
-    translate([floor_straight_len, 0]) {
-        rotate(180) FloorStraightTopOuter(floor_config);
-    }
+    FloorStraightTopLeft(floor_config);
+    FloorStraightTopRight(floor_config);
     
     translate([1*size, -joint_radius]) color("green") LinkB(link_config);
     translate([2*size, -joint_radius]) color("red") LinkA(link_config);

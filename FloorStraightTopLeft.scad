@@ -11,9 +11,9 @@ link_config     = LinkConfig();
 groove_config   = GrooveConfig(link_config = link_config);
 floor_config    = FloorConfig(groove_config = groove_config);
 
-FloorStraightTopOuter(floor_config, printable = true);
+FloorStraightTopLeft(floor_config, printable = true);
 
-module FloorStraightTopOuter(config = FloorConfig(), printable = false) {
+module FloorStraightTopLeft(config = FloorConfig(), printable = false) {
     
     hub_cap_size              = ConfigGet(config, "hub_cap_size");
     
