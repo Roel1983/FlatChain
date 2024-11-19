@@ -69,7 +69,7 @@ module FloorHubBottom(config = FloorConfig()) {
             LinearExtrude(z_from= -groove_depth, z_to = 0) {
                 polygon(points_groove_bottom(
                     groove_config = groove_config,
-                    extra         = floor_hub_length - floor_width / 2 + BIAS
+                    extra         = floor_hub_length + BIAS - floor_hub_position
                 ));
                 circle(r = wheel_radius + groove_wheel_clearance_xy);
             }
