@@ -14,7 +14,9 @@ function FloorConfig(
     hub_hexnut_wall     = nozzle(2),
     hub_hexnut_size     = mm([5.45, 2.5]),
     hub_screw_diameter  = mm(3.0),
+    slot_width          = nozzle(2),
     slot_clearance      = mm(0.03),
+    slot_edge_distance  = undef,
     straight_link_count = 30,
 ) = Config(undef,
     "GrooveConfig",
@@ -25,8 +27,12 @@ function FloorConfig(
         link_size                 = ConfigGet(link_config,   "size"),
         wheel_radius              = ConfigGet(link_config,   "wheel_radius"),
         link_360_pair_count       = ConfigGet(link_config,   "360_pair_count"),
-        slot_width                = nozzle(2),
-        slot_edge_distance        = nozzle(3) + slot_clearance / 2,
+        slot_width                = slot_width,
+        slot_edge_distance        = is_undef(slot_edge_distance) ? (
+                                        nozzle(3) + slot_clearance / 2
+                                    ) : (
+                                        slot_edge_distance
+                                    ),
         min_wall_thickness = (
             2 * slot_edge_distance + slot_width
         ), hub_position = (
